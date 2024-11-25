@@ -1,0 +1,212 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API de Usuários",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/login": {
+        "post": {
+          "summary": "Efetua login e retorna um token JWT.",
+          "tags": ["Autenticação"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "senha": { "type": "string" }
+                  },
+                  "required": ["email", "senha"]
+                },
+                "example": {
+                  "email": "admin@admin.com",
+                  "senha": "admin123"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login bem-sucedido.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "token": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": { "description": "Requisição inválida." },
+            "401": { "description": "Credenciais inválidas." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        }
+      },
+      "/registrar": {
+        "post": {
+          "summary": "Registra um novo usuário.",
+          "tags": ["Usuários"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Usuário criado com sucesso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            },
+            "400": { "description": "Requisição inválida." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        }
+      },
+      "/usuario/{id}": {
+        "get": {
+          "summary": "Obtém um usuário pelo ID.",
+          "tags": ["Usuários"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": { "type": "integer" },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuário encontrado.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            },
+            "404": { "description": "Usuário não encontrado." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        },
+        "put": {
+          "summary": "Atualiza um usuário existente.",
+          "tags": ["Usuários"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": { "type": "integer" },
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Usuário atualizado com sucesso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            },
+            "400": { "description": "Requisição inválida." },
+            "404": { "description": "Usuário não encontrado." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        },
+        "delete": {
+          "summary": "Deleta logicamente um usuário.",
+          "tags": ["Usuários"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": { "type": "integer" },
+              "required": true
+            }
+          ],
+          "responses": {
+            "204": { "description": "Usuário deletado com sucesso." },
+            "404": { "description": "Usuário não encontrado." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        }
+      },
+      "/usuario/{id}/permanente": {
+        "delete": {
+          "summary": "Deleta permanentemente um usuário.",
+          "tags": ["Usuários"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "schema": { "type": "integer" },
+              "required": true
+            }
+          ],
+          "responses": {
+            "204": { "description": "Usuário deletado permanentemente com sucesso." },
+            "404": { "description": "Usuário não encontrado." },
+            "500": { "description": "Erro interno do servidor." }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "Usuario": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "nome": { "type": "string" },
+            "email": { "type": "string" },
+            "senha": { "type": "string" },
+            "cpf": { "type": "string" },
+            "dataNascimento": { "type": "string", "format": "date" },
+            "deletado": { "type": "boolean" }
+          },
+          "required": ["nome", "email", "senha", "cpf", "dataNascimento"]
+        }
+      }
+    }
+  }
+  

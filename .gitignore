@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Dist folder
+dist/
+
+# Debugging
+.vscode/
+.idea/
+
+# Optional npm cache directory
+.npm/
+
+# dotenv environment variables file
+.env
+
+# Gatsby files
+.cache/
+public/
